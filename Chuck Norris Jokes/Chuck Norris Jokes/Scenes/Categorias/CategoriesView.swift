@@ -73,7 +73,52 @@ class CategoriesView: UIView {
     }
     
     // MARK: - Setup Methods
-    
+
     /// Define cores de fundo
     private func setupBackgroundColor() {
         backgroundColor = .systemBackground
+        tableView.backgroundColor = .systemBackground
+    }
+
+    // MARK: - Constraints
+
+    /// Define posição e tamanho dos componentes
+    private func configConstraints() {
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            loadingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+    }
+}
+
+// MARK: - UITableViewDataSource
+
+extension CategoriesView: UITableViewDataSource {
+    /// Retorna quantidade de categorias
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return categories.count
+    }
+
+    /// Cria célula com nome da categoria
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = categories[indexPath.row]
+        return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension CategoriesView: UITableViewDelegate {
+    /// Notifica quando categoria é selecionada
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let category = categories[indexPath.row]
+        delegate?.didSelectCategory(category)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
