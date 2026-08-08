@@ -6,13 +6,6 @@
 //
 import UIKit
 
-// MARK: - Delegate
-
-/// Notifica quando uma categoria é selecionada
-protocol CategoriesViewControllerDelegate: AnyObject {
-    func didSelectCategory(_ category: String)
-}
-
 // MARK: - ViewController
 
 class CategoriesViewController: UIViewController {
@@ -20,20 +13,8 @@ class CategoriesViewController: UIViewController {
     // MARK: - Properties
     
     private let categoriesView = CategoriesView()
-    private let viewModel: CategoriesViewModel
-    weak var delegate: CategoriesViewControllerDelegate?
-    
-    // MARK: - Lifecycle
-    
-    init(viewModel: CategoriesViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+    private let viewModel = CategoriesViewModel()
+
     override func loadView() {
         view = categoriesView
     }
@@ -82,8 +63,10 @@ class CategoriesViewController: UIViewController {
 // MARK: - CategoriesViewDelegate
 
 extension CategoriesViewController: CategoriesViewDelegate {
-    /// Quando categoria é selecionada, avisa o delegate
+    /// Quando categoria é selecionada
     func didSelectCategory(_ category: String) {
-        delegate?.didSelectCategory(category)
+        let jokeViewModel = JokeViewModel(lastCategory: category)
+        let jokeViewController = JokeViewController(viewModel: jokeViewModel)
+        navigationController?.pushViewController(jokeViewController, animated: true)
     }
 }

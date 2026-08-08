@@ -21,8 +21,8 @@ class CategoriesViewModel {
     // MARK: - Properties
     
     /// Service para buscar categorias
-    private let service: JokeServiceProtocol
-    
+    private let service: JokeServiceProtocol = JokeService()
+
     /// Estado atual que avisa quando muda
     private(set) var currentState: CategoriesViewState = .loading {
         didSet {
@@ -32,12 +32,6 @@ class CategoriesViewModel {
     
     /// Closure chamado quando estado muda
     var onStateChanged: (() -> Void)?
-    
-    // MARK: - Lifecycle
-    
-    init(service: JokeServiceProtocol) {
-        self.service = service
-    }
     
     // MARK: - Public Methods
     
